@@ -16,3 +16,15 @@ def new_page(request):
     form = forms.PageForm()
     return render(request, "encyclopedia/new-page.html", {"form": form})
 
+def search(request): 
+    if(request.method == "POST"):
+        all_entries = util.list_entries()
+        recommendations = [] 
+        search_term = request.POST.get('q')
+        
+        for entry in all_entries:
+            if search_term.lower() in entry.lower():
+                recommendations.append(entry)
+        return render(request, "encyclopedia/index.html", {
+            "entries": recommendations
+        })

@@ -17,7 +17,7 @@
   </head>
   <body>
     <nav class="bg-white shadow-sm p-6 flex items-center justify-between">
-      <div class="flex mx-16 items-center justify-center space-x-2">
+      <a href="{% url 'index' %}" class="flex mx-16 items-center justify-center space-x-2">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -30,9 +30,10 @@
           ></path>
         </svg>
         <p class="text-lg font-semibold font-wiki">Wiki</p>
-      </div>
+      </a>
       <div class="flex">
-        <form class="flex items-center border border-gray-300 p-1 rounded-lg">
+        <form class="flex items-center border border-gray-300 p-1 rounded-lg" action="{% url 'search' %}" method="post">
+          {% csrf_token %}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
