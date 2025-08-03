@@ -10,7 +10,7 @@ def index(request):
         "entries": util.list_entries()
     })
 
-def newPage(request):
+def new_page(request):
     if (request.method == "POST"):
         return HttpResponseRedirect("/")
     form = forms.PageForm()
