@@ -12,7 +12,10 @@ def index(request):
 
 def new_page(request):
     if (request.method == "POST"):
-        return HttpResponseRedirect("/")
+        form = forms.PageForm(request.POST)
+        if form.is_valid():
+            util.save_entry(form.cleaned_data['title'], form.cleaned_data['content'])
+            return HttpResponseRedirect("/")
     form = forms.PageForm()
     return render(request, "encyclopedia/new-page.html", {"form": form})
 
