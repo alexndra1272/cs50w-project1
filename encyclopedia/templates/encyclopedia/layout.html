@@ -37,6 +37,7 @@
         </a>
         <div class="flex">
           <form
+            id="search-form"
             class="flex items-center border border-gray-300 p-1 rounded-lg"
             action="{% url 'search' %}"
             method="post"
@@ -62,6 +63,8 @@
             />
           </form>
           <button
+            type="submit"
+            form="search-form"
             class="border border-gray-300 hover:bg-gray-300 py-1 px-2 rounded-lg text-sm mx-3"
           >
             Buscar

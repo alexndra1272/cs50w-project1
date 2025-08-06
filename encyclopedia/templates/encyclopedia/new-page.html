@@ -12,7 +12,7 @@ Encyclopedia - New page
     {% csrf_token %}
     {{ form }}
     <div class="flex space-x-4 justify-end">
-        <button
+        <a href="{% url 'index' %}"
             class="flex items-center space-x-2 bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded-lg text-sm">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                 <path
@@ -20,7 +20,7 @@ Encyclopedia - New page
                 </path>
             </svg>
             <p>Cancelar</p>
-        </button>
+        </a>
 
         <button type="submit"
             class="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded-lg text-sm">
