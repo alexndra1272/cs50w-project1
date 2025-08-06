@@ -4,7 +4,6 @@ from django.http import HttpResponseRedirect
 from . import util
 from . import forms
 
-
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
@@ -17,7 +16,29 @@ def new_page(request):
             util.save_entry(form.cleaned_data['title'], form.cleaned_data['content'])
             return HttpResponseRedirect("/")
     form = forms.PageForm()
-    return render(request, "encyclopedia/new-page.html", {"form": form})
+    return render(request, "encyclopedia/form-page.html", {"form": form, "is_editing": False,
+     "title_action": "Crear nueva página", "action": "crear una nueva página" })
+
+def edit_page(request, entry):
+    if (request.method == "POST"):
+        form = forms.PageForm(request.POST)
+        if form.is_valid():
+            util.save_entry(form.cleaned_data['title'], form.cleaned_data['content'])
+            return HttpResponseRedirect("/")
+    all_entries = util.list_entries()
+   
+    for entry_row in all_entries:
+        if entry.lower() == entry_row.lower():
+            entry = entry_row
+            break
+
+    entry_data = util.get_entry(entry)
+    if entry_data is None: 
+        return HttpResponseRedirect("/")
+    
+    form = forms.PageForm(initial={'title': entry, 'content': entry_data})
+    return render(request, "encyclopedia/form-page.html", {"form": form, "entry": entry, "is_editing": True, "title_action": "Actualizar página", "action": "actualizar una página" })
+
 
 def search(request): 
     if(request.method == "POST"):
