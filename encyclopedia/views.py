@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
+from markdown2 import Markdown
+
 from . import util
 from . import forms
 
@@ -39,6 +41,23 @@ def edit_page(request, entry):
     form = forms.PageForm(initial={'title': entry, 'content': entry_data})
     return render(request, "encyclopedia/form-page.html", {"form": form, "entry": entry, "is_editing": True, "title_action": "Actualizar página", "action": "actualizar una página" })
 
+def page(request, title):
+    markdowner = Markdown()
+    all_entries = util.list_entries()
+    for entry_row in all_entries:
+        if title.lower() == entry_row.lower():
+            title = entry_row
+            break
+
+    entry_data = util.get_entry(title)
+    if entry_data is None: 
+        return HttpResponseRedirect("/")
+
+    result = markdowner.convert(entry_data)
+    return render(request, "encyclopedia/page.html", {
+        "title": title,
+        "content": result
+    })
 
 def search(request): 
     if(request.method == "POST"):
