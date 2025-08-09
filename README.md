@@ -48,6 +48,7 @@ pip install -r requirements.txt
 Add the following environment variables:
 
 ```SECRET_KEY: your_secret_key```
+
 ```DEBUG: 1```
 
 5. Run server
