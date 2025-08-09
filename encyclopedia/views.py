@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 import random
 
 from markdown2 import Markdown
@@ -72,7 +72,7 @@ def page(request, title):
 
     entry_data = util.get_entry(title)
     if entry_data is None:
-        return HttpResponseRedirect("/")
+        raise Http404()
 
     result = markdowner.convert(entry_data)
     return render(
