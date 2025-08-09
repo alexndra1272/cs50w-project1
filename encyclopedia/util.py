@@ -35,3 +35,10 @@ def get_entry(title):
         return f.read().decode("utf-8")
     except FileNotFoundError:
         return None
+
+def search_entry(title: str) -> str | None:
+    all_entries = list_entries()
+    for entry_row in all_entries:
+        if title.lower() == entry_row.lower():
+            return title
+            
