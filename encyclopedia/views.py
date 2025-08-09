@@ -13,12 +13,30 @@ def index(request):
 
 
 def new_page(request):
+    form = forms.PageForm()
     if request.method == "POST":
         form = forms.PageForm(request.POST)
+        title = form.data.get('title')
+        
+        if util.search_entry(title) is not None:
+            form.add_error('title', '¡La página ya existe!')
+            return render(
+                request,
+                "encyclopedia/form-page.html",
+                {
+                    "form": form,
+                    "is_editing": False,
+                    "title_action": "Crear nueva página",
+                    "action": "crear una nueva página",
+                },
+            )
+        
         if form.is_valid():
-            util.save_entry(form.cleaned_data["title"], form.cleaned_data["content"])
+            title = form.cleaned_data["title"]
+            content = form.cleaned_data["content"]
+            
+            util.save_entry(title, content)
             return HttpResponseRedirect("/")
-    form = forms.PageForm()
     return render(
         request,
         "encyclopedia/form-page.html",
@@ -37,12 +55,8 @@ def edit_page(request, entry):
         if form.is_valid():
             util.save_entry(form.cleaned_data["title"], form.cleaned_data["content"])
             return HttpResponseRedirect("/")
-    all_entries = util.list_entries()
-
-    for entry_row in all_entries:
-        if entry.lower() == entry_row.lower():
-            entry = entry_row
-            break
+        
+    entry = util.search_entry(entry)
 
     entry_data = util.get_entry(entry)
     if entry_data is None:
@@ -64,11 +78,7 @@ def edit_page(request, entry):
 
 def page(request, title):
     markdowner = Markdown()
-    all_entries = util.list_entries()
-    for entry_row in all_entries:
-        if title.lower() == entry_row.lower():
-            title = entry_row
-            break
+    title = util.search_entry(title)
 
     entry_data = util.get_entry(title)
     if entry_data is None:
@@ -83,11 +93,13 @@ def page(request, title):
 def search(request):
     if request.method == "POST":
         all_entries = util.list_entries()
+        search_term = request.POST.get("q").strip().lower()
+        entry_normalized = [data.lower() for data in all_entries]
         recommendations = []
-        search_term = request.POST.get("q")
-
-        for entry in all_entries:
-            if search_term.lower() in entry.lower():
+        for entry in entry_normalized:
+            if entry == search_term:
+                return HttpResponseRedirect(f"/wiki/{entry}")
+            if search_term in entry:
                 recommendations.append(entry)
         return render(request, "encyclopedia/index.html", {"entries": recommendations})
 
