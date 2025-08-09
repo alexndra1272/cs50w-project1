@@ -103,6 +103,7 @@ def search(request):
             if search_term in entry.lower():
                 recommendations.append(entry)
         return render(request, "encyclopedia/index.html", {"entries": recommendations})
+    return HttpResponseRedirect("/")
 
 
 def random_page(request):
