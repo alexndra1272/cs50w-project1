@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.urls import reverse
 from django.http import HttpResponseRedirect, Http404
 import random
 
@@ -98,7 +99,7 @@ def search(request):
         recommendations = []
         for entry in entry_normalized:
             if entry == search_term:
-                return HttpResponseRedirect(f"/wiki/{entry}/")
+                return HttpResponseRedirect(reverse(page, args=[entry]))
             if search_term in entry:
                 recommendations.append(entry)
         return render(request, "encyclopedia/index.html", {"entries": recommendations})
@@ -106,7 +107,6 @@ def search(request):
 
 def random_page(request):
     all_entries = util.list_entries()
-
-    entry = random.choices(all_entries)
-
-    return HttpResponseRedirect(f"/wiki/{entry[0]}/")
+    entry = random.choice(all_entries)
+    
+    return HttpResponseRedirect(reverse(page, args=[entry]))
