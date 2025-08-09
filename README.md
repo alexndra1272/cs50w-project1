@@ -27,7 +27,7 @@ Design a Wikipedia-like online encyclopedia.
 2. Create and activate a virtual environment
 
 ```bash
-   python3 -m venv env
+   python -m venv env
    source env/bin/activate
 
    or 
