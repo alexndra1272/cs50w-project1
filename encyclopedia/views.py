@@ -98,7 +98,7 @@ def search(request):
         recommendations = []
         for entry in entry_normalized:
             if entry == search_term:
-                return HttpResponseRedirect(f"/wiki/{entry}")
+                return HttpResponseRedirect(f"/wiki/{entry}/")
             if search_term in entry:
                 recommendations.append(entry)
         return render(request, "encyclopedia/index.html", {"entries": recommendations})
@@ -109,4 +109,4 @@ def random_page(request):
 
     entry = random.choices(all_entries)
 
-    return HttpResponseRedirect(f"/wiki/{entry[0]}")
+    return HttpResponseRedirect(f"/wiki/{entry[0]}/")
