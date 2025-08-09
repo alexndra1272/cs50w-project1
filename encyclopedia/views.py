@@ -95,12 +95,12 @@ def search(request):
     if request.method == "POST":
         all_entries = util.list_entries()
         search_term = request.POST.get("q").strip().lower()
-        entry_normalized = [data.lower() for data in all_entries]
+        
         recommendations = []
-        for entry in entry_normalized:
-            if entry == search_term:
+        for entry in all_entries:
+            if entry.lower() == search_term:
                 return HttpResponseRedirect(reverse(page, args=[entry]))
-            if search_term in entry:
+            if search_term in entry.lower():
                 recommendations.append(entry)
         return render(request, "encyclopedia/index.html", {"entries": recommendations})
 
