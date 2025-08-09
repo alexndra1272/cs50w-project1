@@ -53,6 +53,21 @@ def new_page(request):
 def edit_page(request, entry):
     if request.method == "POST":
         form = forms.PageForm(request.POST)
+        title = form.data.get('title')
+        search_data = util.search_entry(title) 
+        if search_data is not None and search_data != title:
+            form.add_error('title', f'¡La página con el nombre {title} ya existe!')
+            return render(
+                request,
+                "encyclopedia/form-page.html",
+                {
+                    "form": form,
+                    "is_editing": False,
+                    "title_action": "Crear nueva página",
+                    "action": "crear una nueva página",
+                },
+            )
+        
         if form.is_valid():
             util.save_entry(form.cleaned_data["title"], form.cleaned_data["content"])
             return HttpResponseRedirect("/")
@@ -64,6 +79,7 @@ def edit_page(request, entry):
         return HttpResponseRedirect("/")
 
     form = forms.PageForm(initial={"title": entry, "content": entry_data})
+    
     return render(
         request,
         "encyclopedia/form-page.html",
