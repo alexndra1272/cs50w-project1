@@ -43,8 +43,14 @@ Design a Wikipedia-like online encyclopedia.
 pip install -r requirements.txt
 ```
 
+4. Enviroment Variables
 
-3. Run server
+Add the following environment variables:
+
+```SECRET_KEY: your_secret_key```
+```DEBUG: 1```
+
+5. Run server
 
 ```bash
 python manage.py runserver
